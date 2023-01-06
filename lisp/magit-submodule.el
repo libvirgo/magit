@@ -159,6 +159,7 @@ and also setting this variable to t will lead to tears."
   ["Arguments"
    ("-f" "Force"            ("-f" "--force"))
    ("-r" "Recursive"        "--recursive")
+   ("-d" "Use shallow clone" "--depth=1")
    ("-N" "Do not fetch"     ("-N" "--no-fetch"))
    ("-C" "Checkout tip"     "--checkout")
    ("-R" "Rebase onto tip"  "--rebase")
@@ -208,7 +209,7 @@ the superproject.  If it is nil, then the path is determined
 based on the URL.  Optional NAME is the name of the module.  If
 it is nil, then PATH also becomes the name."
   :class 'magit--git-submodule-suffix
-  :description "Add            git submodule add [--force]"
+  :description "Add            git submodule add [--force] [--depth=1]"
   (interactive
    (magit-with-toplevel
      (let* ((url (magit-read-string-ns "Add submodule (remote url)"))
@@ -229,7 +230,7 @@ it is nil, then PATH also becomes the name."
        (list url
              (directory-file-name path)
              (magit-submodule-read-name-for-path path)
-             (magit-submodule-arguments "--force")))))
+             (magit-submodule-arguments "--force" "--depth=1")))))
   (magit-submodule-add-1 url path name args))
 
 (defun magit-submodule-add-1 (url &optional path name args)
@@ -244,6 +245,9 @@ it is nil, then PATH also becomes the name."
        (when (memq (process-status process) '(exit signal))
          (if (> (process-exit-status process) 0)
              (magit-process-sentinel process event)
+           (when (member "--depth=1" args)
+             (magit-run-git-sequencer "config" "-f" ".gitmodules" (concat "submodule." name ".ignore") "dirty")
+             (magit-run-git-sequencer "config" "-f" ".gitmodules" (concat "submodule." name ".shallow") "true"))
            (process-put process 'inhibit-refresh t)
            (magit-process-sentinel process event)
            (when (magit-git-version>= "2.12.0")
