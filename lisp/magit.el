@@ -20,7 +20,7 @@
 ;; Package-Version: 3.3.0.50-git
 ;; Package-Requires: (
 ;;     (emacs "25.1")
-;;     (compat "29.1.0.1")
+;;     (compat "29.1.1.0")
 ;;     (dash "2.19.1")
 ;;     (git-commit "3.3.0")
 ;;     (magit-section "3.3.0")
@@ -75,6 +75,7 @@
 ;; For `magit:--gpg-sign'
 (declare-function epg-list-keys "epg" (context &optional name mode))
 (declare-function epg-decode-dn "epg" (alist))
+(defvar epa-protocol)
 
 ;;; Options
 

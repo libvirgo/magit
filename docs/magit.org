@@ -337,7 +337,7 @@ local branch onto the remote configured as the push-remote.  (If the
 push-remote is not configured yet, then you would first be prompted
 for the remote to push to.)
 
-So far we have mentioned the commit, push, and log menu commands.
+So far we have mentioned the commit and push menu commands.
 These are probably among the menus you will be using the most, but
 many others exist.  To show a menu that lists all other menus (as well
 as the various apply commands and some other essential commands), type
@@ -5548,9 +5548,9 @@ If a file has conflicts and Git cannot resolve them by itself, then it
 puts both versions into the affected file along with special markers
 whose purpose is to denote the boundaries of the unresolved part of
 the file and between the different versions.  These boundary lines
-begin with the strings consisting of six times the same character, one
-of ~<~, ~|~, ~=~ and ~>~ and are followed by information about the source of
-the respective versions, e.g.:
+begin with the strings consisting of seven times the same character,
+one of ~<~, ~|~, ~=~ and ~>~, and are followed by information about the source
+of the respective versions, e.g.:
 
 #+begin_example
   <<<<<<< HEAD
@@ -7999,6 +7999,12 @@ faster ~vfork~ will be used.  (The creation of child processes still
 takes about twice as long on Darwin compared to Linux.)  See [fn:mac1]
 for more information.
 
+Additionally, ~git~ installed from a package manager like ~brew~ or ~nix~
+seems to be slower than the native executable. Profile the ~git~
+executable you're running against the one at ~/usr/bin/git~, and if
+you notice a notable difference try using the latter as
+~magit-git-executable~.
+
 [fn:mac1] https://lists.gnu.org/archive/html/bug-gnu-emacs/2017-04/msg00201.html
 
 *** Default Bindings
@@ -9052,19 +9058,6 @@ use ~global-reveal-mode~.  It makes sure that text around point is
 always visible.  If that is too drastic for your taste, then you may
 instead use ~magit-diff-visit-file-hook~ to reveal the text, possibly
 using ~reveal-post-command~ or for Org buffers ~org-reveal~.
-
-*** I am unable to stage when using Tramp from MS Windows
-
-Magit may be unable to stage (or otherwise apply) individual hunks
-when you are connected to remote machine using Tramp and the local
-machine uses MS Windows.
-
-There appears to be a problem with ~process-send-eof~ in this scenario,
-as mentioned at the end of ~tramp-tests.el~.  I have contacted the Tramp
-maintainer about this.  For now this unfortunately means that it just
-doesn't work and we cannot do anything about it.  If you have more
-information, then please comment on
-https://github.com/magit/magit/issues/3624.
 
 *** I am no longer able to save popup defaults
 

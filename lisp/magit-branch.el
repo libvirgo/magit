@@ -409,7 +409,11 @@ when using `magit-branch-and-checkout'."
                     (magit-read-starting-point prompt choice default-start))
             (user-error "Not a valid starting-point: %s" choice))))
     (let ((branch (magit-read-string-ns (concat prompt " named"))))
-      (list branch (magit-read-starting-point prompt branch default-start)))))
+      (if (magit-branch-p branch)
+          (magit-branch-read-args
+           (format "Branch `%s' already exists; pick another name" branch)
+           default-start)
+        (list branch (magit-read-starting-point prompt branch default-start))))))
 
 ;;;###autoload
 (defun magit-branch-spinout (branch &optional from)
@@ -817,7 +821,9 @@ and also rename the respective reflog file."
    ("p"   magit-branch.<branch>.pushRemote)]
   ["Configure repository defaults"
    ("R" magit-pull.rebase)
-   ("P" magit-remote.pushDefault)]
+   ("P" magit-remote.pushDefault)
+   ("b" "Update default branch" magit-update-default-branch
+    :inapt-if-not magit-get-some-remote)]
   ["Configure branch creation"
    ("a m" magit-branch.autoSetupMerge)
    ("a r" magit-branch.autoSetupRebase)]

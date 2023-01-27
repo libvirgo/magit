@@ -25,8 +25,9 @@ RMDIR    ?= rm -rf
 TAR      ?= tar
 SED      ?= sed
 
-EMACS    ?= emacs
-BATCH     = $(EMACS) -Q --batch $(LOAD_PATH)
+EMACS      ?= emacs
+EMACS_ARGS ?=
+BATCH       = $(EMACS) -Q --batch $(EMACS_ARGS) $(LOAD_PATH)
 
 LISP_EXTRA_TARGETS ?= check-declare
 
@@ -113,7 +114,7 @@ VERSION ?= $(shell \
   git describe --tags --abbrev=0 --always | cut -c2-)
 TIMESTAMP = 20211004
 
-COMPAT_VERSION        = 29.1.0.1
+COMPAT_VERSION        = 29.1.1.0
 DASH_VERSION          = 2.19.1
 GIT_COMMIT_VERSION    = $(VERSION)
 LIBGIT_VERSION        = 0
@@ -123,7 +124,7 @@ MAGIT_SECTION_VERSION = $(VERSION)
 TRANSIENT_VERSION     = 0.3.6
 WITH_EDITOR_VERSION   = 3.0.5
 
-COMPAT_SNAPSHOT              = 29.1.0.1
+COMPAT_SNAPSHOT              = 29.1.1.0
 DASH_MELPA_SNAPSHOT          = 20210826
 GIT_COMMIT_MELPA_SNAPSHOT    = $(TIMESTAMP)
 LIBGIT_MELPA_SNAPSHOT        = 0
@@ -234,6 +235,16 @@ endif # ifndef LOAD_PATH
 ifndef ORG_LOAD_PATH
 ORG_LOAD_PATH = -L ../../org/lisp
 endif
+
+## Dependencies ######################################################
+
+# This isn't used by make, but is needed for the Compile ci workflow.
+
+DEPS  = compat
+DEPS += dash
+DEPS += transient/lisp
+DEPS += vterm
+DEPS += with-editor/lisp
 
 ## Publish ###########################################################
 
